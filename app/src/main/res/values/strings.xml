@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Final_Emo</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="facebook_app_id">135686763444998</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

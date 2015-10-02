@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             >
+
+    <LinearLayout
+        android:id="@+id/ll_list_tab"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <com.example.vynv.final_emo.common.HorizontalListView
+            android:id="@+id/horizontalListviewIconTab"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+        <FrameLayout
+            android:id="@+id/frMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </LinearLayout>
+</LinearLayout>
