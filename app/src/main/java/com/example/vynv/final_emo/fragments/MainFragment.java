@@ -159,21 +159,22 @@ public static int ID_CODE_RESULT=400;
         if (iconImage1 && iconImage2) {
             final int resourceId = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
             final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-            Log.d("xxx2",uri.getEncodedPath()+"");
+            Log.d("xxx2",resourceId+"");
             shareIntent(getActivity(), uri, resourceId);
         } else {
             if (!iconImage1) {
                 final int resourceId = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
                 final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2",uri.getEncodedPath()+"");
+                Log.d("xxx2",resourceId+"");
                 shareIntent(getActivity(), uri, resourceId);
             } else {
                 final int resourceId = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
                 final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2",uri.getEncodedPath()+"");
+                Log.d("xxx2",resourceId+"");
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
+        resetImage();
     }
 
     @Override

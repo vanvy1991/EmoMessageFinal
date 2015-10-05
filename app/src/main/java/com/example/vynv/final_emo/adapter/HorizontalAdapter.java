@@ -1,6 +1,8 @@
 package com.example.vynv.final_emo.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vynv.final_emo.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,7 @@ public class HorizontalAdapter extends BaseAdapter {
     private ArrayList<String> mIcons;
     private Context mContext;
     private LayoutInflater mInflater;
+    private DisplayImageOptions options;
 
     public HorizontalAdapter(Context mContext, ArrayList<String> tabName, ArrayList<String> icons) {
         Log.d("xxx",icons+"---"+tabName);
@@ -33,6 +37,7 @@ public class HorizontalAdapter extends BaseAdapter {
         mTabName.addAll(tabName);
         mIcons = new ArrayList<>();
         mIcons.addAll(icons);
+
     }
 
     @Override
@@ -69,8 +74,11 @@ public class HorizontalAdapter extends BaseAdapter {
             viewHolder.tabName.setText(mTabName.get(position));
         }
         int resID = convertView.getResources().getIdentifier("@drawable/" + mIcons.get(position), null, mContext.getPackageName());
-        Log.d("xxxresID","");
-//        ImageLoader.getInstance().displayImage("@drawable/" + mIcons.get(position), viewHolder.icon);
+//        Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resID);
+        Bitmap b = BitmapFactory.decodeResource(convertView.getResources(), resID);
+        Log.d("xxxresID", "" + b.getWidth());
+        viewHolder.icon.setImageBitmap(b);
+//        ImageLoader.getInstance().displayImage("drawable://" + uri, viewHolder.icon, options);
 //        viewHolder.icon.setImageResource(resID);
         return convertView;
     }
