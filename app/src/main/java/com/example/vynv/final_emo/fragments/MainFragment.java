@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.vynv.final_emo.HomeActivity_;
 import com.example.vynv.final_emo.R;
 import com.example.vynv.final_emo.adapter.HorizontalAdapter;
 import com.example.vynv.final_emo.adapter.PagerAdapter;
@@ -45,6 +46,8 @@ public class MainFragment extends Fragment implements View.OnDragListener {
 public static int ICON_TAB_EMO=100;
 public static int TEXT_TAB_EMO=200;
 public static int ID_CODE_RESULT=400;
+    private int ADD_ICON_CODE=111;
+    private static String PATH_FILE_NAME="mysdfile.txt";
     @ViewById(R.id.horizontalListview)
     protected HorizontalListView mHorizontalListView;
 
@@ -80,9 +83,11 @@ public static int ID_CODE_RESULT=400;
     ArrayList<String> resultEmo = new ArrayList<>();
     String itemImage1;
     String itemImage2;
+    String icon;
     private boolean iconImage1 = false;
     private boolean iconImage2 = false;
-
+    private Uri uri;
+    private int resourceId;
 
     @AfterViews
     public void init() {
@@ -97,7 +102,7 @@ public static int ID_CODE_RESULT=400;
         mHorizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                EmojiconFragment f = EmojiconFragment_.builder().numTabs(i).build();
+                EmojiconFragment f = EmojiconFragment_.builder().numTabs(i).lenghtTab(tabName.size()).build();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frMainContainer, f);
@@ -139,9 +144,8 @@ public static int ID_CODE_RESULT=400;
     }
 
     public void initPager() {
-        icons=setTabEmo(getActivity(),"tab_emoji_icon.txt",ICON_TAB_EMO,0);
+        icons=setTabEmo(getActivity(), "tab_emoji_icon.txt", ICON_TAB_EMO, 0);
         tabName=setTabEmo(getActivity(),"tab_emoji_icon.txt",TEXT_TAB_EMO,0);
-
         mHorizontalAdapter = new HorizontalAdapter(getActivity(), tabName, icons);
         mHorizontalListView.setAdapter(mHorizontalAdapter);
     }
@@ -157,24 +161,25 @@ public static int ID_CODE_RESULT=400;
     @Click(R.id.img_result)
     public void imgResultClick() {
         if (iconImage1 && iconImage2) {
-            final int resourceId = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
-            final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+            resourceId = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
+             uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
             Log.d("xxx2",resourceId+"");
             shareIntent(getActivity(), uri, resourceId);
         } else {
             if (!iconImage1) {
-                final int resourceId = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
-                final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2",resourceId+"");
+                resourceId = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
+                uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+                Log.d("xxx2", resourceId + "");
                 shareIntent(getActivity(), uri, resourceId);
             } else {
-                final int resourceId = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
-                final Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2",resourceId+"");
+                resourceId = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
+                uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+                Log.d("xxx2", resourceId + "");
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
-        resetImage();
+        ((HomeActivity_)getActivity()).createFile(ADD_ICON_CODE,icon);
+
     }
 
     @Override
@@ -245,7 +250,8 @@ public static int ID_CODE_RESULT=400;
     }
 
     public String randomImage(String itemImage1, String itemImage2) {
-        String icon=getResultEmoji(getActivity(), itemImage1, itemImage2, "emoji_alchemy.txt");
+        icon=getResultEmoji(getActivity(), itemImage1, itemImage2, "emoji_alchemy.txt");
+        Log.d("xxx11",""+icon);
         return icon;
 
     }

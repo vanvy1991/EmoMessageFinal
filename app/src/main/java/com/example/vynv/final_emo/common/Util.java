@@ -2,11 +2,17 @@ package com.example.vynv.final_emo.common;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,10 +23,14 @@ public class Util {
     private static int ICONS_TAB = 100;
     private static int TEXT_TAB = 200;
     private static int ID_TAB = 300;
+    private static int RECENT_TAB = 500;
     private static int RESULT_EMO = 400;
     static String line;
     public static String resultEmoji;
     public static ArrayList<String> resultTabEmo;
+     static FileOutputStream fos;
+    static OutputStreamWriter myOutWriter;
+    static FileWriter writer;
 
     public static int getHeightScreen(Context context) {
         WindowManager wm = (WindowManager) context
@@ -89,6 +99,9 @@ public class Util {
                         Collections.addAll(resultTabEmo, dataTab[0]);
                     }
                 }
+                if(param==RECENT_TAB){
+                    Collections.addAll(resultTabEmo, dataTab[0]);
+                }
 
             }
             return resultTabEmo;
@@ -104,10 +117,31 @@ public class Util {
                 String[] data = v.split(" ");
                 if ((data[0].equals(param1) && data[1].equals(param2)) || (data[1].equals(param1) && data[0].equals(param2))) {
                     resultEmoji = data[(data.length - 1)];
-                    break;
+                    return resultEmoji;
                 }
             }
-            return resultEmoji;
+        }
+        return null;
+    }
+    public static String openFileSDCard(){
+        try {
+            File myFile = new File("/sdcard/EmoIcon/mysdfile.txt");
+            if(myFile.exists()) {
+                Log.d("xxx1","Da vao");
+                FileInputStream fIn = new FileInputStream(myFile);
+                BufferedReader myReader = new BufferedReader(
+                        new InputStreamReader(fIn));
+                String aDataRow=myReader.readLine();
+//                ArrayList<String> aBuffer=new ArrayList<>();
+//                while ((aDataRow = myReader.readLine()) != null) {
+//                    if (!aDataRow.equals("")) {
+//                        aBuffer.add(aDataRow);
+//                    }
+//                }
+                return aDataRow;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

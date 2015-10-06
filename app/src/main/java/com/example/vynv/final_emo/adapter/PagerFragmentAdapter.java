@@ -21,7 +21,6 @@ public class PagerFragmentAdapter extends ArrayAdapter<itemFragment> {
     LayoutInflater layoutInflater;
     public PagerFragmentAdapter(Context context,ArrayList<itemFragment> itemFragment){
         super(context,0,itemFragment);
-        Log.d("cccc",""+itemFragment);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

@@ -76,7 +76,6 @@ public class HorizontalAdapter extends BaseAdapter {
         int resID = convertView.getResources().getIdentifier("@drawable/" + mIcons.get(position), null, mContext.getPackageName());
 //        Uri uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resID);
         Bitmap b = BitmapFactory.decodeResource(convertView.getResources(), resID);
-        Log.d("xxxresID", "" + b.getWidth());
         viewHolder.icon.setImageBitmap(b);
 //        ImageLoader.getInstance().displayImage("drawable://" + uri, viewHolder.icon, options);
 //        viewHolder.icon.setImageResource(resID);
