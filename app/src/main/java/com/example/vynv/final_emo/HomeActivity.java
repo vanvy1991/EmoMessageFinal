@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.example.vynv.final_emo.common.Util.openFileSDCard;
 
@@ -22,6 +21,7 @@ import static com.example.vynv.final_emo.common.Util.openFileSDCard;
 public class HomeActivity extends AppCompatActivity {
     String text = "";
     ArrayList<String> itemRecent;
+    ArrayList<String> itemTMP;
     private static int ADD_CODE = 111;
     private static int GET_CODE = 222;
     String[] dataIconRecent;
@@ -41,30 +41,41 @@ public class HomeActivity extends AppCompatActivity {
 
     public ArrayList<String> createFile(int CODE, String icon) {
         itemRecent = new ArrayList<>();
-        ArrayList<String> itemTMP = new ArrayList<>();
+        itemTMP = new ArrayList<>();
         String arrayRecent = openFileSDCard();
+        boolean checkSame = false;
         if (arrayRecent != null) {
             String[] dataIconRecent = arrayRecent.replace("$", " ").split(" ");
-            Log.d("x01", "" + Arrays.toString(dataIconRecent));
             if (CODE == GET_CODE) {
-                for (String item : dataIconRecent) {
-                    if (itemRecent.size() < 9) {
-                        if (itemTMP != null) {
-                            for (String itemIcon : itemTMP) {
-                                if (!itemIcon.equals(item)) {
-                                    itemRecent.add(item);
-                                    itemTMP.add(item);
-                                }
+                for (int item=0 ;item<= dataIconRecent.length-1;item++) {
+                    if(itemRecent.size()<9) {
+                        for(String items:itemRecent){
+                            if(dataIconRecent[item].equals(items)){
+                                checkSame=true;
+                                Log.d("xxxx11",""+checkSame);
+                                break;
+//                                itemRecent.add(dataIconRecent[item]);
                             }
-                        } else {
-                            itemTMP.add(item);
-                            itemRecent.add(item);
+                            else{
+                                checkSame=false;
+                                Log.d("xxxx12",""+checkSame);
+                            }
                         }
-                    } else {
-                        return itemRecent;
+                        if(!checkSame){
+                            Log.d("xxxx13",""+checkSame);
+                            itemRecent.add(dataIconRecent[item]);
+                        }
+//                        for (String items : itemRecent) {
+//                            if (!items.equals(dataIconRecent[item])) {
+//                                Log.d("xxxx03", "item:" + item + "----" + itemRecent);
+//                            }
+//                        }
                     }
-
+                    else{
+                        break;
+                    }
                 }
+                return itemRecent;
             }
             if (CODE == ADD_CODE) {
                 String saveIconRecent = icon + "$" + arrayRecent;

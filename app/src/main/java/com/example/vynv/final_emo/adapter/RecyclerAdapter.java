@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<String> mItems;
+    private ArrayList<String> mItems = new ArrayList<>();
     private View mViews;
 
     public RecyclerAdapter(Context context, ArrayList<String> items) {
