@@ -121,7 +121,6 @@ public class IntentUtil {
         Uri imageUri = Uri.parse(path);
         share.putExtra(Intent.EXTRA_STREAM, imageUri);
         share.setPackage(app);
-        mActivity.startActivity(share);
+        mActivity.startActivityForResult(share,300);
     }
-
 }

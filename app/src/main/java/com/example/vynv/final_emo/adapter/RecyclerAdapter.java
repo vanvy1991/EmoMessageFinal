@@ -41,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Object item = mItems.get(position);
-        int resID = mViews.getResources().getIdentifier("@drawable/" + mItems.get(position), null, mViews.getContext().getPackageName());
+        int resID = mViews.getResources().getIdentifier("@drawable/" + item, null, mViews.getContext().getPackageName());
         viewHolder.img.setImageResource(resID);
     }
 

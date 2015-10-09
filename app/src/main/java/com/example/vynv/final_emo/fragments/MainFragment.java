@@ -21,7 +21,6 @@ import com.example.vynv.final_emo.R;
 import com.example.vynv.final_emo.adapter.HorizontalAdapter;
 import com.example.vynv.final_emo.adapter.PagerAdapter;
 import com.example.vynv.final_emo.common.HorizontalListView;
-import com.example.vynv.final_emo.sqlite.DataBaseHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.messenger.MessengerThreadParams;
@@ -41,13 +40,11 @@ import static com.example.vynv.final_emo.common.Util.setTabEmo;
 
 
 @EFragment(R.layout.fragment_main)
-public class MainFragment extends Fragment implements View.OnDragListener {
+public class MainFragment extends Fragment implements View.OnDragListener{
 
-public static int ICON_TAB_EMO=100;
-public static int TEXT_TAB_EMO=200;
-public static int ID_CODE_RESULT=400;
-    private int ADD_ICON_CODE=111;
-    private static String PATH_FILE_NAME="mysdfile.txt";
+    public static int ICON_TAB_EMO = 100;
+    public static int TEXT_TAB_EMO = 200;
+    private int ADD_ICON_CODE = 111;
     @ViewById(R.id.horizontalListview)
     protected HorizontalListView mHorizontalListView;
 
@@ -55,13 +52,16 @@ public static int ID_CODE_RESULT=400;
     protected ViewPager mVp;
 
     @ViewById(R.id.img_first)
-    protected ImageView mImgFirst;
+    ImageView mImgFirst;
 
     @ViewById(R.id.img_second)
     protected ImageView mImgSecond;
 
     @ViewById(R.id.img_result)
     protected ImageView mImgResult;
+
+    @ViewById(R.id.imgNew)
+    protected ImageView mImageNew;
 
     @ViewById(R.id.ll_chat_content)
     protected LinearLayout mLlChatContent;
@@ -72,15 +72,8 @@ public static int ID_CODE_RESULT=400;
     private boolean mPicking;
     //    Intent sendIntent;
     private ShareDialog shareDialog;
-    private DataBaseHelper myDbHelper;
     private PagerAdapter mPagerAdapter;
-    String arrData[][];
-    String arrItemIcon[][];
-    Intent sendIntent;
-    private Activity mActivity;
-    ArrayList<String> arrayItemIcon = new ArrayList<>();
-    ArrayList<String> items = new ArrayList<>();
-    ArrayList<String> resultEmo = new ArrayList<>();
+    public Activity mActivity;
     String itemImage1;
     String itemImage2;
     String icon;
@@ -88,12 +81,12 @@ public static int ID_CODE_RESULT=400;
     private boolean iconImage2 = false;
     private Uri uri;
     private int resourceId;
+    int resID;
 
     @AfterViews
     public void init() {
 
         mActivity = getActivity();
-//        connectDB();
         initFacebook();
         initDrag();
         initPager();
@@ -114,7 +107,7 @@ public static int ID_CODE_RESULT=400;
     @Override
     public void onResume() {
         super.onResume();
-        // Logs 'install' and 'app activate' App Events.
+        resetImage();
         AppEventsLogger.activateApp(getActivity());
     }
 
@@ -122,7 +115,6 @@ public static int ID_CODE_RESULT=400;
     public void onPause() {
         mActivity = getActivity();
         super.onPause();
-        // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(getActivity());
     }
 
@@ -144,8 +136,8 @@ public static int ID_CODE_RESULT=400;
     }
 
     public void initPager() {
-        icons=setTabEmo(getActivity(), "tab_emoji_icon.txt", ICON_TAB_EMO, 0);
-        tabName=setTabEmo(getActivity(),"tab_emoji_icon.txt",TEXT_TAB_EMO,0);
+        icons = setTabEmo(getActivity(), "tab_emoji_icon.txt", ICON_TAB_EMO, 0);
+        tabName = setTabEmo(getActivity(), "tab_emoji_icon.txt", TEXT_TAB_EMO, 0);
         mHorizontalAdapter = new HorizontalAdapter(getActivity(), tabName, icons);
         mHorizontalListView.setAdapter(mHorizontalAdapter);
     }
@@ -162,30 +154,20 @@ public static int ID_CODE_RESULT=400;
     public void imgResultClick() {
         if (iconImage1 && iconImage2) {
             resourceId = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
-             uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-            Log.d("xxx2",resourceId+"");
+            uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
             shareIntent(getActivity(), uri, resourceId);
         } else {
             if (!iconImage1) {
                 resourceId = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
                 uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2", resourceId + "");
                 shareIntent(getActivity(), uri, resourceId);
             } else {
                 resourceId = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
                 uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
-                Log.d("xxx2", resourceId + "");
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
-        ((HomeActivity_)getActivity()).createFile(ADD_ICON_CODE,icon);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        resetImage();
+        ((HomeActivity_) getActivity()).createFile(ADD_ICON_CODE, icon);
     }
 
     @Override
@@ -197,8 +179,6 @@ public static int ID_CODE_RESULT=400;
                 if (dragEvent.getClipDescription()
                         .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     return true;
-                } else {
-
                 }
                 // Returns false. During the current drag and drop operation, this View will
                 // not receive events again until ACTION_DRAG_ENDED is sent.
@@ -215,7 +195,7 @@ public static int ID_CODE_RESULT=400;
             case DragEvent.ACTION_DROP:
 
                 int resourceId = getResources().getIdentifier("@drawable/" + dragEvent.getClipData().getItemAt(0).getText().toString(), null, getActivity().getPackageName());
-                int resID = 0;
+
                 ViewGroup draggedImageViewParentLayout
                         = (ViewGroup) draggedImageView.getParent();
                 draggedImageViewParentLayout.removeView(draggedImageView);
@@ -237,7 +217,11 @@ public static int ID_CODE_RESULT=400;
                     if (mImgFirst.getDrawable() != null && mImgSecond.getDrawable() != null) {
                         resID = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
                         mImgResult.setImageResource(resID);
-                        items.clear();
+                    }
+                    if(mImgResult.getDrawable() !=null) {
+                        mImageNew.setVisibility(View.VISIBLE);
+                    }else{
+                        mImageNew.setVisibility(View.GONE);
                     }
                 }
                 return true;
@@ -250,18 +234,15 @@ public static int ID_CODE_RESULT=400;
     }
 
     public String randomImage(String itemImage1, String itemImage2) {
-        icon=getResultEmoji(getActivity(), itemImage1, itemImage2, "emoji_alchemy.txt");
-        Log.d("xxx11",""+icon);
+        icon = getResultEmoji(getActivity(), itemImage1, itemImage2, "emoji_alchemy.txt");
         return icon;
-
     }
 
-    private void resetImage() {
+    public void resetImage() {
         mImgFirst.setImageResource(0);
         mImgSecond.setImageResource(0);
         mImgResult.setImageResource(0);
-        arrayItemIcon.clear();
+        mImageNew.setVisibility(View.GONE);
     }
-
 
 }

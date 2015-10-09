@@ -6,10 +6,8 @@ import android.util.Log;
 
 import com.example.vynv.final_emo.fragments.HomeFragment;
 import com.example.vynv.final_emo.fragments.HomeFragment_;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,7 +22,6 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<String> itemTMP;
     private static int ADD_CODE = 111;
     private static int GET_CODE = 222;
-    String[] dataIconRecent;
 
     @AfterViews
     public void initViews() {
@@ -47,31 +44,20 @@ public class HomeActivity extends AppCompatActivity {
         if (arrayRecent != null) {
             String[] dataIconRecent = arrayRecent.replace("$", " ").split(" ");
             if (CODE == GET_CODE) {
-                for (int item=0 ;item<= dataIconRecent.length-1;item++) {
-                    if(itemRecent.size()<9) {
-                        for(String items:itemRecent){
-                            if(dataIconRecent[item].equals(items)){
-                                checkSame=true;
-                                Log.d("xxxx11",""+checkSame);
+                for (int item = 0; item <= dataIconRecent.length - 1; item++) {
+                    if (itemRecent.size() < 20) {
+                        for (String items : itemRecent) {
+                            if (dataIconRecent[item].equals(items)) {
+                                checkSame = true;
                                 break;
-//                                itemRecent.add(dataIconRecent[item]);
-                            }
-                            else{
-                                checkSame=false;
-                                Log.d("xxxx12",""+checkSame);
+                            } else {
+                                checkSame = false;
                             }
                         }
-                        if(!checkSame){
-                            Log.d("xxxx13",""+checkSame);
+                        if (!checkSame) {
                             itemRecent.add(dataIconRecent[item]);
                         }
-//                        for (String items : itemRecent) {
-//                            if (!items.equals(dataIconRecent[item])) {
-//                                Log.d("xxxx03", "item:" + item + "----" + itemRecent);
-//                            }
-//                        }
-                    }
-                    else{
+                    } else {
                         break;
                     }
                 }
@@ -79,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             if (CODE == ADD_CODE) {
                 String saveIconRecent = icon + "$" + arrayRecent;
+                Log.d("xxx",""+saveIconRecent);
                 try {
                     File recentFile = new File("/sdcard/EmoIcon/mysdfile.txt");
                     if (recentFile.exists()) {
@@ -94,39 +81,5 @@ public class HomeActivity extends AppCompatActivity {
 
         }
         return null;
-//        if (arrayRecent != null) {
-//            for (String item : arrayRecent) {
-//                String str= item.replaceAll("$", " ");
-//                dataIconRecent = str.split(" ");
-//                Collections.addAll(itemRecent, dataIconRecent[0].replaceAll("&", " "));
-//            }
-//            Log.d("xxxxx2",""+ Arrays.toString(dataIconRecent) +"---"+arrayRecent);
-//            if (arrayRecent != null) {
-//                arrayRecent.add(String.valueOf(resourceID));
-//
-//                try {
-//                    File gpxfile = new File("/sdcard/EmoIcon/", fileName);
-//                    if (gpxfile.exists()) {
-//                        FileWriter writer = new FileWriter(gpxfile);
-//                        Log.d("xxx111", "Da vao" + arrayRecent);
-//                        for (int i = 0; i <= arrayRecent.size(); i++) {
-//                            writer.write("ddddddd" + "$");
-//                        }
-//                        writer.flush();
-//                        writer.close();
-//                    }
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        String text=resourceID+"\n";
-//        File pathFile = new File("/sdcard/EmoIcon/");
-//        if(!pathFile.exists()){
-//            pathFile.mkdir();
-//        }
-//
     }
-
 }
