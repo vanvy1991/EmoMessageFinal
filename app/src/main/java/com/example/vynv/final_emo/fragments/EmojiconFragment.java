@@ -21,12 +21,15 @@ import static com.example.vynv.final_emo.common.Util.setTabEmo;
 
 
 @EFragment(R.layout.fragment_emojicon)
-public class EmojiconFragment extends Fragment{
+public class EmojiconFragment extends Fragment {
     ArrayList<String> arrData;
+    ArrayList<Integer> arrDataRecent;
+
     @ViewById(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
     private static int TEXT_TAB = 300;
     private static int GET_ICON_CODE = 222;
+
     @FragmentArg
     protected int numTabs;
     @FragmentArg
@@ -41,17 +44,25 @@ public class EmojiconFragment extends Fragment{
     }
 
     public void setUpTab() {
-        if(numTabs+1==lenghtTab){
-            arrData=((HomeActivity_)getActivity()).createFile(GET_ICON_CODE,"");
-            recentAdapter=new RecentAdapter(arrData,getActivity());
-            mRecyclerView.setAdapter(recentAdapter);
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        if (numTabs + 1 == lenghtTab) {
+            arrDataRecent=new ArrayList<>();
+                    arrData = ((HomeActivity_) getActivity()).createFile(GET_ICON_CODE, 0);
+            if (arrData != null) {
+                for(String item:arrData){
+                    if(item !=null) {
+                        arrDataRecent.add(Integer.parseInt(item));
+                    }
 
+                }
+                recentAdapter = new RecentAdapter(arrDataRecent, getActivity());
+                mRecyclerView.setAdapter(recentAdapter);
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+            }
 
-        }else {
+        } else {
             arrData = setTabEmo(getActivity(), "icons_tab.txt", TEXT_TAB, (numTabs + 1));
-            if(arrData != null) {
+            if (arrData != null) {
                 mAdapter = new RecyclerAdapter(getActivity(), arrData);
                 mRecyclerView.setAdapter(mAdapter);
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());

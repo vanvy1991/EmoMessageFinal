@@ -40,7 +40,7 @@ import static com.example.vynv.final_emo.common.Util.setTabEmo;
 
 
 @EFragment(R.layout.fragment_main)
-public class MainFragment extends Fragment implements View.OnDragListener{
+public class MainFragment extends Fragment implements View.OnDragListener {
 
     public static int ICON_TAB_EMO = 100;
     public static int TEXT_TAB_EMO = 200;
@@ -76,7 +76,7 @@ public class MainFragment extends Fragment implements View.OnDragListener{
     public Activity mActivity;
     String itemImage1;
     String itemImage2;
-    String icon;
+   private String icon;
     private boolean iconImage1 = false;
     private boolean iconImage2 = false;
     private Uri uri;
@@ -85,7 +85,6 @@ public class MainFragment extends Fragment implements View.OnDragListener{
 
     @AfterViews
     public void init() {
-
         mActivity = getActivity();
         initFacebook();
         initDrag();
@@ -107,6 +106,7 @@ public class MainFragment extends Fragment implements View.OnDragListener{
     @Override
     public void onResume() {
         super.onResume();
+        ((HomeActivity_) getActivity()).createFile(ADD_ICON_CODE, resID);
         resetImage();
         AppEventsLogger.activateApp(getActivity());
     }
@@ -167,7 +167,12 @@ public class MainFragment extends Fragment implements View.OnDragListener{
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
-        ((HomeActivity_) getActivity()).createFile(ADD_ICON_CODE, icon);
+
+
+//        String str="asd123";
+//        String text= Base64.encodeToString(str.getBytes(), Base64.DEFAULT);
+//        text= new String(Base64.decode(text, Base64.DEFAULT));
+//        Log.d("xxx22", text + "===" + icon);
     }
 
     @Override
@@ -218,9 +223,9 @@ public class MainFragment extends Fragment implements View.OnDragListener{
                         resID = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
                         mImgResult.setImageResource(resID);
                     }
-                    if(mImgResult.getDrawable() !=null) {
+                    if (mImgResult.getDrawable() != null) {
                         mImageNew.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         mImageNew.setVisibility(View.GONE);
                     }
                 }
@@ -243,6 +248,8 @@ public class MainFragment extends Fragment implements View.OnDragListener{
         mImgSecond.setImageResource(0);
         mImgResult.setImageResource(0);
         mImageNew.setVisibility(View.GONE);
+        iconImage1=false;
+        iconImage2=false;
     }
 
 }

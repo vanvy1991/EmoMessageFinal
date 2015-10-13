@@ -13,6 +13,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -26,6 +28,7 @@ public class Util {
     private static int RECENT_TAB = 500;
     private static int RESULT_EMO = 400;
     static String line;
+    static String PATH="/sdcard/EmoIcon/";
     public static String resultEmoji;
     public static ArrayList<String> resultTabEmo;
      static FileOutputStream fos;
@@ -123,24 +126,41 @@ public class Util {
         }
         return null;
     }
-    public static String openFileSDCard(){
+    public static String openFileSDCard(String pathFile){
         try {
-            File myFile = new File("/sdcard/EmoIcon/mysdfile.txt");
-            if(myFile.exists()) {
-                Log.d("xxx1","Da vao");
-                FileInputStream fIn = new FileInputStream(myFile);
-                BufferedReader myReader = new BufferedReader(
-                        new InputStreamReader(fIn));
-                String aDataRow=myReader.readLine();
-//                ArrayList<String> aBuffer=new ArrayList<>();
-//                while ((aDataRow = myReader.readLine()) != null) {
-//                    if (!aDataRow.equals("")) {
-//                        aBuffer.add(aDataRow);
-//                    }
-//                }
-                return aDataRow;
+            File fileFolder=new File(PATH);
+
+            File myFile = new File(PATH+pathFile);
+            if(fileFolder.exists() && myFile.exists()) {
+                    FileInputStream fIn = new FileInputStream(myFile);
+                    BufferedReader myReader = new BufferedReader(
+                            new InputStreamReader(fIn));
+                    String aDataRow = myReader.readLine();
+                    return aDataRow;
+            }
+            else{
+                fileFolder.mkdir();
+                myFile.createNewFile();
+                Log.d("xxx122","da vao");
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static String sha256(String string){
+        try {
+            MessageDigest sss = MessageDigest.getInstance("SHA-256");
+            sss.update(string.getBytes());
+            byte byteData[] = sss.digest();
+            //convert the byte to hex format method 1
+            StringBuffer sb = new StringBuffer();
+            for(byte tmp: byteData) {
+                sb.append(Integer.toString((tmp & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;

@@ -6,8 +6,10 @@ import android.util.Log;
 
 import com.example.vynv.final_emo.fragments.HomeFragment;
 import com.example.vynv.final_emo.fragments.HomeFragment_;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +20,7 @@ import static com.example.vynv.final_emo.common.Util.openFileSDCard;
 @EActivity(R.layout.activity_home)
 public class HomeActivity extends AppCompatActivity {
     String text = "";
+    private static String PATH_FILE = "mysdfile.log";
     ArrayList<String> itemRecent;
     ArrayList<String> itemTMP;
     private static int ADD_CODE = 111;
@@ -25,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @AfterViews
     public void initViews() {
+        createFile(ADD_CODE,0);
         initHome();
     }
 
@@ -36,10 +40,10 @@ public class HomeActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public ArrayList<String> createFile(int CODE, String icon) {
+    public ArrayList<String> createFile(int CODE, int icon) {
         itemRecent = new ArrayList<>();
         itemTMP = new ArrayList<>();
-        String arrayRecent = openFileSDCard();
+        String arrayRecent = openFileSDCard(PATH_FILE);
         boolean checkSame = false;
         if (arrayRecent != null) {
             String[] dataIconRecent = arrayRecent.replace("$", " ").split(" ");
@@ -47,11 +51,13 @@ public class HomeActivity extends AppCompatActivity {
                 for (int item = 0; item <= dataIconRecent.length - 1; item++) {
                     if (itemRecent.size() < 20) {
                         for (String items : itemRecent) {
-                            if (dataIconRecent[item].equals(items)) {
-                                checkSame = true;
-                                break;
-                            } else {
-                                checkSame = false;
+                            if (items != null) {
+                                if (dataIconRecent[item].equals(items)) {
+                                    checkSame = true;
+                                    break;
+                                } else {
+                                    checkSame = false;
+                                }
                             }
                         }
                         if (!checkSame) {
@@ -64,10 +70,11 @@ public class HomeActivity extends AppCompatActivity {
                 return itemRecent;
             }
             if (CODE == ADD_CODE) {
+
                 String saveIconRecent = icon + "$" + arrayRecent;
-                Log.d("xxx",""+saveIconRecent);
+                Log.d("xxaaa", "" + saveIconRecent);
                 try {
-                    File recentFile = new File("/sdcard/EmoIcon/mysdfile.txt");
+                    File recentFile = new File("/sdcard/EmoIcon/" + PATH_FILE);
                     if (recentFile.exists()) {
                         FileWriter writer = new FileWriter(recentFile);
                         writer.write(saveIconRecent);
@@ -79,6 +86,22 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
 
+        } else {
+            if (icon > 0) {
+                Log.d("xxxxx", "vao day" + icon);
+                String saveIconRecent = String.valueOf(icon);
+                try {
+                    File recentFile = new File("/sdcard/EmoIcon/" + PATH_FILE);
+                    if (recentFile.exists()) {
+                        FileWriter writer = new FileWriter(recentFile);
+                        writer.write(saveIconRecent);
+                        writer.flush();
+                        writer.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }

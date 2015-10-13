@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Created by vynv on 10/9/15.
  */
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder> {
-    private ArrayList<String> mIcons;
+    private ArrayList<Integer> mIcons;
     private Context mContext;
     private View mViews;
 
-    public RecentAdapter( ArrayList<String> icons, Context context){
+    public RecentAdapter( ArrayList<Integer> icons, Context context){
         Log.d("xxx11","Da vao:"+icons);
         if (mIcons != null) {
             mIcons.clear();
@@ -43,8 +43,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         Object item = mIcons.get(position);
-        int resID = mViews.getResources().getIdentifier("@drawable/" + item, null, mViews.getContext().getPackageName());
-        viewHolder.img.setImageResource(resID);
+//        int resID = mViews.getResources().getIdentifier("@drawable/" + item, null, mViews.getContext().getPackageName());
+        viewHolder.img.setImageResource((Integer) item);
     }
 
     @Override
