@@ -49,43 +49,45 @@ public class HomeActivity extends AppCompatActivity {
             String[] dataIconRecent = arrayRecent.replace("$", " ").split(" ");
             if (CODE == GET_CODE) {
                 for (int item = 0; item <= dataIconRecent.length - 1; item++) {
-                    if (itemRecent.size() < 20) {
-                        for (String items : itemRecent) {
-                            if (items != null) {
-                                if (dataIconRecent[item].equals(items)) {
-                                    checkSame = true;
-                                    break;
-                                } else {
-                                    checkSame = false;
+                    if(!dataIconRecent[item].equals("0")) {
+                        if (itemRecent.size() < 20) {
+                            for (String items : itemRecent) {
+                                if (items != null) {
+                                    if (dataIconRecent[item].equals(items)) {
+                                        checkSame = true;
+                                        break;
+                                    } else {
+                                        checkSame = false;
+                                    }
                                 }
                             }
+                            if (!checkSame) {
+                                itemRecent.add(dataIconRecent[item]);
+                            }
+                        } else {
+                            break;
                         }
-                        if (!checkSame) {
-                            itemRecent.add(dataIconRecent[item]);
-                        }
-                    } else {
-                        break;
                     }
                 }
                 return itemRecent;
             }
             if (CODE == ADD_CODE) {
-
-                String saveIconRecent = icon + "$" + arrayRecent;
-                Log.d("xxaaa", "" + saveIconRecent);
-                try {
-                    File recentFile = new File("/sdcard/EmoIcon/" + PATH_FILE);
-                    if (recentFile.exists()) {
-                        FileWriter writer = new FileWriter(recentFile);
-                        writer.write(saveIconRecent);
-                        writer.flush();
-                        writer.close();
+                if(icon>0) {
+                    String saveIconRecent = icon + "$" + arrayRecent;
+                    Log.d("xxaaa", "" + saveIconRecent);
+                    try {
+                        File recentFile = new File("/sdcard/EmoIcon/" + PATH_FILE);
+                        if (recentFile.exists()) {
+                            FileWriter writer = new FileWriter(recentFile);
+                            writer.write(saveIconRecent);
+                            writer.flush();
+                            writer.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
-
         } else {
             if (icon > 0) {
                 Log.d("xxxxx", "vao day" + icon);

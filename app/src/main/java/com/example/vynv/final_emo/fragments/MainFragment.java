@@ -94,6 +94,12 @@ public class MainFragment extends Fragment implements View.OnDragListener {
         mHorizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if((i+1)==tabName.size()){
+                    HideEmo(false);
+                }
+                else{
+                    HideEmo(true);
+                }
                 EmojiconFragment f = EmojiconFragment_.builder().numTabs(i).lenghtTab(tabName.size()).build();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -167,12 +173,6 @@ public class MainFragment extends Fragment implements View.OnDragListener {
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
-
-
-//        String str="asd123";
-//        String text= Base64.encodeToString(str.getBytes(), Base64.DEFAULT);
-//        text= new String(Base64.decode(text, Base64.DEFAULT));
-//        Log.d("xxx22", text + "===" + icon);
     }
 
     @Override
@@ -251,5 +251,16 @@ public class MainFragment extends Fragment implements View.OnDragListener {
         iconImage1=false;
         iconImage2=false;
     }
-
+public void HideEmo(boolean hideShow){
+    if(!hideShow) {
+        mImgFirst.setVisibility(View.GONE);
+        mImgResult.setVisibility(View.GONE);
+        mImgSecond.setVisibility(View.GONE);
+    }
+    else{
+        mImgFirst.setVisibility(View.VISIBLE);
+        mImgResult.setVisibility(View.VISIBLE);
+        mImgSecond.setVisibility(View.VISIBLE);
+    }
+}
 }

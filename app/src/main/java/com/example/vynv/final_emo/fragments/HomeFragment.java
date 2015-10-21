@@ -57,13 +57,13 @@ public class HomeFragment extends Fragment {
             fragmentTransaction.replace(R.id.frMain, f);
             fragmentTransaction.commit();
         }
-//        else if(pos==1){
-//            CameraFragment f=CameraFragment_.builder().build();
-//            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frHome, f);
-//            fragmentTransaction.commit();
-//        }
+        else if(pos==1){
+            CameraFragment f=CameraFragment_.builder().build();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.frMain, f);
+            fragmentTransaction.commit();
+        }
 
     }
 }

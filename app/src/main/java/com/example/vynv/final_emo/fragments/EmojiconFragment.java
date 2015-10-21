@@ -24,7 +24,7 @@ import static com.example.vynv.final_emo.common.Util.setTabEmo;
 public class EmojiconFragment extends Fragment {
     ArrayList<String> arrData;
     ArrayList<Integer> arrDataRecent;
-
+    MainFragment mainFragment=new MainFragment();
     @ViewById(R.id.recycler_view)
     protected RecyclerView mRecyclerView;
     private static int TEXT_TAB = 300;
