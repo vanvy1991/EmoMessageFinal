@@ -54,19 +54,10 @@ public class CameraFragment extends Fragment {
                 .build();
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        previewCapturedImage();
-//    }
-
-
     public Bitmap smoothEffect(Bitmap src, double value) {
-        //create convolution matrix instance
         ConvolutionMatrix convMatrix = new ConvolutionMatrix(3);
         convMatrix.setAll(1);
         convMatrix.Matrix[1][1] = value;
-        // set weight of factor and offset
         convMatrix.Factor = value + 8;
         convMatrix.Offset = 1;
         return ConvolutionMatrix.computeConvolution3x3(src, convMatrix);
@@ -75,7 +66,6 @@ public class CameraFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if( resultCode== Activity.RESULT_OK)
         {
-            //... some code to inflate/create/find appropriate ImageView to place grabbed image
             this.grabImage(imgPreview);
             imgPreview.setVisibility(View.VISIBLE);
         }
@@ -86,7 +76,6 @@ public class CameraFragment extends Fragment {
         File photo = null;
         try
         {
-            // place where to store camera taken picture
             photo = this.createTemporaryFile("picture", ".jpg");
             photo.delete();
         }

@@ -57,7 +57,7 @@ public class IntentUtil {
                 ResolveInfo info = (ResolveInfo) objShareIntentListAdapter.getItem(item);
                 Log.d("xxxO",""+info.activityInfo.packageName);
                 if (info.activityInfo.packageName.contains("facebook.orca")) {
-                    sendMessageFacebook(mUri);
+                    sendMessageFb(mResourceID);
                 } else if (info.activityInfo.packageName.contains("facebook.katana")) {
                     postStatusFB(mResourceID);
                 } else if (info.activityInfo.packageName.contains("android.gm")) {
@@ -110,7 +110,18 @@ public class IntentUtil {
         }
     }
 
-
+    public static void sendMessageFb(int resourceId){
+        Bitmap b = BitmapFactory.decodeResource(mActivity.getResources(), resourceId);
+        Intent intent=new Intent("android.intent.action.SEND");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), b, "Title", null);
+        Uri imageUri = Uri.parse(path);
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        intent.setType("image/png");
+        intent.setPackage("com.facebook.orca");
+        mActivity.startActivity(intent);
+    }
     public static void sendMessage(String app, int resourceId) {
         Bitmap b = BitmapFactory.decodeResource(mActivity.getResources(), resourceId);
         Intent share = new Intent(Intent.ACTION_SEND);
