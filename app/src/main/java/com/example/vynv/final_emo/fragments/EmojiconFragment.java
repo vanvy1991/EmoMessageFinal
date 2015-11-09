@@ -17,7 +17,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
-import static com.example.vynv.final_emo.common.Util.setTabEmo;
+import static com.example.vynv.final_emo.common.Util.setIdTab;
 
 
 @EFragment(R.layout.fragment_emojicon)
@@ -56,15 +56,17 @@ public class EmojiconFragment extends Fragment {
                 }
                 recentAdapter = new RecentAdapter(arrDataRecent, getActivity());
                 mRecyclerView.setAdapter(recentAdapter);
+                recentAdapter.notifyDataSetChanged();
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                 mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
             }
 
         } else {
-            arrData = setTabEmo(getActivity(), "icons_tab.txt", TEXT_TAB, (numTabs + 1));
+            arrData = setIdTab("icons_tab.txt", (numTabs + 1));
             if (arrData != null) {
                 mAdapter = new RecyclerAdapter(getActivity(), arrData);
                 mRecyclerView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                 mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
             }

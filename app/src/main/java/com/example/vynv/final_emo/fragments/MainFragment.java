@@ -36,7 +36,9 @@ import java.util.ArrayList;
 
 import static com.example.vynv.final_emo.common.IntentUtil.shareIntent;
 import static com.example.vynv.final_emo.common.Util.getResultEmoji;
+import static com.example.vynv.final_emo.common.Util.getResultShowHide;
 import static com.example.vynv.final_emo.common.Util.setTabEmo;
+import static com.example.vynv.final_emo.common.Util.updateShowHide;
 
 
 @EFragment(R.layout.fragment_main)
@@ -81,8 +83,8 @@ public class MainFragment extends Fragment implements View.OnDragListener {
     private boolean iconImage2 = false;
     private Uri uri;
     private int resourceId;
-    int resID;
-
+    int resID,pos;
+    int showHide=0;
     @AfterViews
     public void init() {
         mActivity = getActivity();
@@ -94,11 +96,12 @@ public class MainFragment extends Fragment implements View.OnDragListener {
         mHorizontalListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if((i+1)==tabName.size()){
+                pos=i;
+                if ((i + 1) == tabName.size()) {
                     HideEmo(false);
-                }
-                else{
+                } else {
                     HideEmo(true);
+                    resetImage();
                 }
                 EmojiconFragment f = EmojiconFragment_.builder().numTabs(i).lenghtTab(tabName.size()).build();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -112,9 +115,14 @@ public class MainFragment extends Fragment implements View.OnDragListener {
     @Override
     public void onResume() {
         super.onResume();
-        ((HomeActivity_) getActivity()).createFile(ADD_ICON_CODE, resID);
+        EmojiconFragment f = EmojiconFragment_.builder().numTabs(pos).lenghtTab(tabName.size()).build();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frMainContainer, f);
+        fragmentTransaction.commit();
         resetImage();
         AppEventsLogger.activateApp(getActivity());
+
     }
 
     @Override
@@ -158,21 +166,27 @@ public class MainFragment extends Fragment implements View.OnDragListener {
 
     @Click(R.id.img_result)
     public void imgResultClick() {
+
         if (iconImage1 && iconImage2) {
             resourceId = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
             uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+            updateShowHide(getActivity(), randomImage(itemImage1, itemImage2), "icons_tab.txt", showHide);
             shareIntent(getActivity(), uri, resourceId);
+
         } else {
             if (!iconImage1) {
                 resourceId = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
                 uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+                updateShowHide(getActivity(), itemImage2, "icons_tab.txt", showHide);
                 shareIntent(getActivity(), uri, resourceId);
             } else {
                 resourceId = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
                 uri = Uri.parse("android.resource://com.example.vynv.final_emo/" + resourceId);
+                updateShowHide(getActivity(),itemImage1, "icons_tab.txt", showHide);
                 shareIntent(getActivity(), uri, resourceId);
             }
         }
+        ((HomeActivity_) getActivity()).createFile(ADD_ICON_CODE, resID);
     }
 
     @Override
@@ -209,25 +223,30 @@ public class MainFragment extends Fragment implements View.OnDragListener {
                     imgTarget.setImageResource(resourceId);
                     draggedImageView.setVisibility(View.VISIBLE);
                     if (imgTarget.equals(mImgFirst)) {
+                        mImageNew.setVisibility(View.GONE);
                         iconImage1 = true;
                         itemImage1 = dragEvent.getClipData().getItemAt(0).getText().toString();
                         resID = getResources().getIdentifier("@drawable/" + itemImage1, null, getActivity().getPackageName());
                         mImgResult.setImageResource(resID);
                     } else if (imgTarget.equals(mImgSecond)) {
                         iconImage2 = true;
+                        mImageNew.setVisibility(View.GONE);
                         itemImage2 = dragEvent.getClipData().getItemAt(0).getText().toString();
                         resID = getResources().getIdentifier("@drawable/" + itemImage2, null, getActivity().getPackageName());
                         mImgResult.setImageResource(resID);
                     }
                     if (mImgFirst.getDrawable() != null && mImgSecond.getDrawable() != null) {
+                        showHide=getResultShowHide(getActivity(),randomImage(itemImage1, itemImage2),"icons_tab.txt");
+                        if(showHide==0){
+                            mImageNew.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            mImageNew.setVisibility(View.GONE);
+                        }
                         resID = getResources().getIdentifier("@drawable/" + randomImage(itemImage1, itemImage2), null, getActivity().getPackageName());
                         mImgResult.setImageResource(resID);
                     }
-                    if (mImgResult.getDrawable() != null) {
-                        mImageNew.setVisibility(View.VISIBLE);
-                    } else {
-                        mImageNew.setVisibility(View.GONE);
-                    }
+
                 }
                 return true;
             // An unknown action type was received.
@@ -256,6 +275,7 @@ public void HideEmo(boolean hideShow){
         mImgFirst.setVisibility(View.GONE);
         mImgResult.setVisibility(View.GONE);
         mImgSecond.setVisibility(View.GONE);
+        mImageNew.setVisibility(View.GONE);
     }
     else{
         mImgFirst.setVisibility(View.VISIBLE);
