@@ -108,9 +108,7 @@ public class Util {
         return  arr;
     }
     public static ArrayList<String> setTabEmo(Context mContext, String fileName, int param, int idTab) {
-
         resultTabEmo = new ArrayList<>();
-
         ArrayList<String> arrayResultTab = setResultEmo(mContext, fileName);
         if (arrayResultTab != null) {
             for (String v : arrayResultTab) {
@@ -167,20 +165,22 @@ public class Util {
                 for (String v : arrayResultEmo) {
                     String[] data = v.split(" ");
                     int index = data[2].indexOf(image);
-                    Log.d("xxxx12", "" + index);
                     tmp++;
                     if (data[0].equals(image)) {
 
-                        if (showHide == 0) {
-                            data[2] = String.valueOf(1);
-                        } else {
-                            data[2] = String.valueOf(1);
+                            if (showHide == 0) {
+                                data[2] = String.valueOf(1);
+                            } else {
+                                if(data[3].equals("0")){
+                                    Log.d("xxxx12", "" + index);
+                                    data[3] = String.valueOf(1);
+                                }
+                            }
+                            arrayResultEmo.set((tmp - 1), data[0] + " " + data[1] + " " + data[2] + " " + data[3]);
+                            getIconTab(arrayResultEmo);
+                            Log.d("xxx2", "" + arrayResultEmo);
+                            break;
                         }
-                        arrayResultEmo.set((tmp - 1), data[0] + " " + data[1] + " " + data[2]);
-                        getIconTab(arrayResultEmo);
-                        Log.d("xxx2", "" + arrayResultEmo);
-                        break;
-                    }
                 }
             }
         }
@@ -219,6 +219,22 @@ public class Util {
         return 1;
     }
 
+    public static String showHideNewGrid(String nameImage){
+        ArrayList<String> arrayResultEmo = showDataFile("/sdcard/EmoIcon/icons_tab.txt");
+        ArrayList<String> result = new ArrayList<>();
+        String[] data;
+        if (arrayResultEmo != null) {
+            for (String v : arrayResultEmo) {
+                data = v.split(" ");
+                if (data[0].equals(nameImage)) {
+                    Log.d("xxxx", "" + nameImage);
+                    return data[3];
+                }
+            }
+
+        }
+        return null;
+    }
     public static String getResultEmoji(Context mContext, String param1, String param2, String fileName) {
 
         ArrayList<String> arrayResultEmo = setResultEmo(mContext, fileName);
@@ -233,6 +249,7 @@ public class Util {
         }
         return null;
     }
+
 
     public static String openFileSDCard(String pathFile) {
         try {

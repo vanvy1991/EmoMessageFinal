@@ -64,7 +64,7 @@ public class EmojiconFragment extends Fragment {
         } else {
             arrData = setIdTab("icons_tab.txt", (numTabs + 1));
             if (arrData != null) {
-                mAdapter = new RecyclerAdapter(getActivity(), arrData);
+                mAdapter = new RecyclerAdapter(getActivity(), arrData,(numTabs + 1));
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());
